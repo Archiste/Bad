@@ -149,3 +149,69 @@ body {
   opacity: 0.65;
   pointer-events: none;
 }
+
+@media (max-width: 600px) {
+  body {
+    padding-left: 8px;
+    padding-right: 8px;
+    touch-action: manipulation;
+  }
+
+  #a {
+    max-width: 100vw;
+    overflow: hidden;
+  }
+
+  .start-overlay {
+    gap: 2rem;
+    padding: 1.5rem;
+    box-sizing: border-box;
+  }
+
+  #asciiTitle {
+    max-width: 100%;
+    overflow: hidden;
+    font-size: clamp(0.2rem, 1.65vw, 0.42rem);
+    letter-spacing: 0;
+  }
+
+  #playButton {
+    min-width: 8rem;
+    min-height: 3rem;
+    padding: 12px 24px;
+  }
+
+  #m {
+    max-width: calc(100vw - 32px);
+    text-align: center;
+    font-size: 12px;
+  }
+
+  #copyright {
+    right: 8px;
+    bottom: calc(6px + var(--safe-bottom));
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 600px) and (orientation: landscape) {
+  .start-overlay {
+    gap: 0.75rem;
+    justify-content: flex-start;
+    padding-top: calc(0.75rem + var(--safe-top));
+  }
+
+  #asciiTitle {
+    font-size: clamp(0.18rem, 1.1vw, 0.3rem);
+  }
+
+  #playButton {
+    min-height: 2.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #asciiTitle {
+    animation: none;
+  }
+}
