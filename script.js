@@ -4,12 +4,15 @@ const startOverlay = document.getElementById("startOverlay");
 const playButton = document.getElementById("playButton");
 const ramp = " .:-=+*#%@";
 
+const ROTATE_ON_PORTRAIT = true;
+const BASE_FONT = 10;
+
 const music = new Audio("【東方】Bad Apple!! ＰＶ【影絵】.mp3");
 music.loop = true;
 music.volume = 0.5;
 music.preload = "auto";
 
-function fit() {
+function measureCharWidth() {
   const sample = document.createElement("span");
   sample.style.cssText = `
     font: 100px ${getComputedStyle(pre).fontFamily};
@@ -19,21 +22,36 @@ function fit() {
   `;
   sample.textContent = "M".repeat(20);
   document.body.appendChild(sample);
-
-  const charWidth = sample.getBoundingClientRect().width / 20 / 100;
+  const width = sample.getBoundingClientRect().width / 20 / 100;
   sample.remove();
+  return width;
+}
 
-  const horizontalPadding = innerWidth <= 600 ? 16 : 0;
-  const availableWidth = Math.max(innerWidth - horizontalPadding, 1);
-  const availableHeight = Math.max(innerHeight - 16, 1);
-  const scale = Math.min(
-    availableWidth / (VIDEO_WIDTH * charWidth),
-    availableHeight / (VIDEO_HEIGHT * 1.2)
+function fit() {
+  const naturalWidth = VIDEO_WIDTH * measureCharWidth() * BASE_FONT;
+  const naturalHeight = VIDEO_HEIGHT * 1.2 * BASE_FONT;
+
+  const style = getComputedStyle(document.body);
+  const margin = 8;
+  const availableWidth = Math.max(
+    document.body.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight) - margin * 2,
+    1
   );
-  pre.style.fontSize = `${Math.max(Math.floor(scale * 10) / 10, 1)}px`;
+  const availableHeight = Math.max(
+    document.body.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom) - margin * 2,
+    1
+  );
+
+  const straight = Math.min(availableWidth / naturalWidth, availableHeight / naturalHeight);
+  const turned = Math.min(availableWidth / naturalHeight, availableHeight / naturalWidth);
+  const isPhonePortrait = Math.min(innerWidth, innerHeight) <= 600 && innerHeight > innerWidth;
+  const rotate = ROTATE_ON_PORTRAIT && isPhonePortrait && turned > straight * 1.15;
+
+  pre.style.transform = `${rotate ? "rotate(90deg) " : ""}scale(${rotate ? turned : straight})`;
 }
 
 addEventListener("resize", fit);
+addEventListener("orientationchange", fit);
 fit();
 
 async function loadVideoData() {
@@ -46,7 +64,7 @@ loadVideoData()
   .then((videoData) => {
     msg.remove();
 
-    const frameBuffer = new Uint8Array((VIDEO_WIDTH + 1) * VIDEO_HEIGHT);
+    const frameBuffer = new Uint8Array((VIDEO_WIDTH + 1) * VIDEO_HEIGHT - 1);
     const decoder = new TextDecoder("latin1");
     const charMap = [...ramp].map((char) => char.charCodeAt(0));
 
@@ -64,7 +82,9 @@ loadVideoData()
         for (let column = 0; column < VIDEO_WIDTH; column += 1) {
           frameBuffer[bufferIndex++] = charMap[videoData[baseIndex + row * VIDEO_WIDTH + column]];
         }
-        frameBuffer[bufferIndex++] = 10;
+        if (row < VIDEO_HEIGHT - 1) {
+          frameBuffer[bufferIndex++] = 10;
+        }
       }
 
       pre.textContent = decoder.decode(frameBuffer);
@@ -144,11 +164,9 @@ loadVideoData()
 
     drawFrame(0);
     lastFrameIndex = 0;
+    fit();
     requestAnimationFrame(tick);
   })
   .catch(() => {
-    msg.textContent = "Ce navigateur ne peut pas lire la vidéo ASCII.";
-  });
-
     msg.textContent = "Ce navigateur ne peut pas lire la vidéo ASCII.";
   });
