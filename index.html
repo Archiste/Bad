@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    >
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    >
+    <title>BadArchiste</title>
+    <link rel="icon" type="image/jpeg" href="fde29655a267d7d0cc917c8051b33b18.jpg">
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    <div id="startOverlay" class="start-overlay" aria-live="polite">
+      <pre id="asciiTitle" aria-label="BadArchiste"> ▄▄▄▄    ▄▄▄      ▓█████▄  ▄▄▄       ██▀███   ▄████▄   ██░ ██  ██▓  ██████ ▄▄▄█████▓▓█████ 
+▓█████▄ ▒████▄    ▒██▀ ██▌▒████▄    ▓██ ▒ ██▒▒██▀ ▀█  ▓██░ ██▒▓██▒▒██    ▒ ▓  ██▒ ▓▒▓█   ▀ 
+▒██▒ ▄██▒██  ▀█▄  ░██   █▌▒██  ▀█▄  ▓██ ░▄█ ▒▒▓█    ▄ ▒██▀▀██░▒██▒░ ▓██▄   ▒ ▓██░ ▒░▒███   
+▒██░█▀  ░██▄▄▄▄██ ░▓█▄   ▌░██▄▄▄▄██ ▒██▀▀█▄  ▒▓▓▄ ▄██▒░▓█ ░██ ░██░  ▒   ██▒░ ▓██▓ ░ ▒▓█  ▄ 
+░▓█  ▀█▓ ▓█   ▓██▒░▒████▓  ▓█   ▓██▒░██▓ ▒██▒▒ ▓███▀ ░░▓█▒░██▓░██░▒██████▒▒  ▒██▒ ░ ░▒████▒
+░▒▓███▀▒ ▒▒   ▓▒█░ ▒▒▓  ▒  ▒▒   ▓▒█░░ ▒▓ ░▒▓░░ ░▒ ▒  ░ ▒ ░░▒░▒░▓  ▒ ▒▓▒ ▒ ░  ▒ ░░   ░░ ▒░ ░
+▒░▒   ░   ▒   ▒▒ ░ ░ ▒  ▒   ▒   ▒▒ ░  ░▒ ░ ▒░  ░  ▒    ▒ ░▒░ ░ ▒ ░░ ░▒  ░ ░    ░     ░ ░  ░
+ ░    ░   ░   ▒    ░ ░  ░   ░   ▒     ░░   ░ ░         ░  ░░ ░ ▒ ░░  ░  ░    ░         ░   
+ ░            ░  ░   ░          ░  ░   ░     ░ ░       ░  ░  ░ ░        ░              ░  ░
+      ░            ░                         ░                                             </pre>
+      <button id="playButton" type="button">Play</button>
+    </div>
+
+    <pre id="a" aria-label="Vidéo en ASCII"></pre>
+    <span id="m" aria-live="polite">chargement…</span>
+    <footer id="copyright">&copy; 2026 Archiste</footer>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
