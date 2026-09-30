@@ -1,5 +1,5 @@
 const pre = document.getElementById("a");
-const msg = document.getElementById("m");
+const msg = document.getElementById("m"); 
 const startOverlay = document.getElementById("startOverlay");
 const playButton = document.getElementById("playButton");
 const ramp = " .:-=+*#%@";
