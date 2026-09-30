@@ -1,11 +1,11 @@
 const pre = document.getElementById("a");
-const msg = document.getElementById("m"); 
+const msg = document.getElementById("m");
 const startOverlay = document.getElementById("startOverlay");
 const playButton = document.getElementById("playButton");
 const ramp = " .:-=+*#%@";
 
-const ROTATE_ON_PORTRAIT = true;
-const BASE_FONT = 10;
+const ROTATE_ON_PORTRAIT = false;
+const BASE_FONT = 10; // taille fixe : on agrandit/rétrécit avec transform, pas avec font-size
 
 const music = new Audio("【東方】Bad Apple!! ＰＶ【影絵】.mp3");
 music.loop = true;
@@ -170,3 +170,4 @@ loadVideoData()
   .catch(() => {
     msg.textContent = "Ce navigateur ne peut pas lire la vidéo ASCII.";
   });
+
