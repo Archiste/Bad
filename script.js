@@ -23,8 +23,14 @@ function fit() {
   const charWidth = sample.getBoundingClientRect().width / 20 / 100;
   sample.remove();
 
-  const scale = Math.min(innerWidth / (W * charWidth), innerHeight / (H * 1.2));
-  pre.style.fontSize = `${Math.floor(scale * 10) / 10}px`;
+  const horizontalPadding = innerWidth <= 600 ? 16 : 0;
+  const availableWidth = Math.max(innerWidth - horizontalPadding, 1);
+  const availableHeight = Math.max(innerHeight - 16, 1);
+  const scale = Math.min(
+    availableWidth / (VIDEO_WIDTH * charWidth),
+    availableHeight / (VIDEO_HEIGHT * 1.2)
+  );
+  pre.style.fontSize = `${Math.max(Math.floor(scale * 10) / 10, 1)}px`;
 }
 
 addEventListener("resize", fit);
@@ -40,7 +46,7 @@ loadVideoData()
   .then((videoData) => {
     msg.remove();
 
-    const frameBuffer = new Uint8Array((W + 1) * H);
+    const frameBuffer = new Uint8Array((VIDEO_WIDTH + 1) * VIDEO_HEIGHT);
     const decoder = new TextDecoder("latin1");
     const charMap = [...ramp].map((char) => char.charCodeAt(0));
 
@@ -51,12 +57,12 @@ loadVideoData()
     let hasStarted = false;
 
     function drawFrame(frameIndex) {
-      const baseIndex = frameIndex * W * H;
+      const baseIndex = frameIndex * VIDEO_WIDTH * VIDEO_HEIGHT;
       let bufferIndex = 0;
 
-      for (let row = 0; row < H; row += 1) {
-        for (let column = 0; column < W; column += 1) {
-          frameBuffer[bufferIndex++] = charMap[videoData[baseIndex + row * W + column]];
+      for (let row = 0; row < VIDEO_HEIGHT; row += 1) {
+        for (let column = 0; column < VIDEO_WIDTH; column += 1) {
+          frameBuffer[bufferIndex++] = charMap[videoData[baseIndex + row * VIDEO_WIDTH + column]];
         }
         frameBuffer[bufferIndex++] = 10;
       }
@@ -66,7 +72,7 @@ loadVideoData()
 
     function tick(now) {
       if (playing) {
-        const frameIndex = Math.floor(((now - startTime) / 1000) * FPS + offset) % N;
+        const frameIndex = Math.floor(((now - startTime) / 1000) * VIDEO_FPS + offset) % VIDEO_FRAME_COUNT;
         if (frameIndex !== lastFrameIndex) {
           drawFrame(frameIndex);
           lastFrameIndex = frameIndex;
@@ -141,5 +147,8 @@ loadVideoData()
     requestAnimationFrame(tick);
   })
   .catch(() => {
+    msg.textContent = "Ce navigateur ne peut pas lire la vidéo ASCII.";
+  });
+
     msg.textContent = "Ce navigateur ne peut pas lire la vidéo ASCII.";
   });
