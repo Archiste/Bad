@@ -41,8 +41,6 @@ function fit() {
     1
   );
 
-  // Always keep the ASCII upright (0deg).
-  // Scale it responsively so it uses as much of the available viewport as possible.
   const scale = Math.min(availableWidth / naturalWidth, availableHeight / naturalHeight);
   pre.style.transform = `rotate(0deg) scale(${scale})`;
 }
@@ -89,8 +87,7 @@ loadVideoData()
 
     function tick() {
       if (playing && !music.paused && Number.isFinite(music.currentTime)) {
-        // Sync the ASCII frames to the actual audio clock. This avoids drift and
-        // also handles Firefox/Zen delaying the first audio frame slightly.
+
         const frameIndex = Math.floor(music.currentTime * VIDEO_FPS) % VIDEO_FRAME_COUNT;
         if (frameIndex !== lastFrameIndex) {
           drawFrame(frameIndex);
@@ -115,11 +112,10 @@ loadVideoData()
       playButton.textContent = "Loading…";
 
       try {
-        // Keep play() directly inside the user's click/keyboard gesture.
+ 
         music.currentTime = 0;
         await music.play();
 
-        // Only mark the experience as started after the browser confirms playback.
         hasStarted = true;
         playing = true;
         startOverlay.classList.add("hidden");
@@ -157,8 +153,7 @@ loadVideoData()
 
     music.addEventListener("error", () => showAudioError(new Error("Audio element error")));
     music.addEventListener("ended", () => {
-      // loop=true should handle this, but keep the animation consistent on browsers
-      // that briefly report ended while looping.
+    
       if (hasStarted) {
         playing = true;
         drawFrame(0);
